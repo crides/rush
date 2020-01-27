@@ -117,15 +117,14 @@ fn process_input(mode: InputMode,
 #[inline]
 fn apply_multi_ctx(mode: InputMode,
                    context: &mut Context, exprs: &[&str], mut output: &mut Write) -> io::Result<()> {
-    let func: fn(_, _, _, _) -> _ = match mode {
-        InputMode::String => rush::apply_string_multi_ctx,
-        InputMode::Lines => rush::map_lines_multi_ctx,
-        InputMode::Words => rush::map_words_multi_ctx,
-        InputMode::Chars => rush::map_chars_multi_ctx,
-        InputMode::Bytes => rush::map_bytes_multi_ctx,
-        InputMode::Files => rush::map_files_multi_ctx,
-    };
-    func(context, exprs, io::stdin(), &mut output)
+    match mode {
+        InputMode::String => rush::apply_string_multi_ctx(context, exprs, io::stdin(), &mut output),
+        InputMode::Lines => rush::map_lines_multi_ctx(context, exprs, io::stdin(), &mut output),
+        InputMode::Words => rush::map_words_multi_ctx(context, exprs, io::stdin(), &mut output),
+        InputMode::Chars => rush::map_chars_multi_ctx(context, exprs, io::stdin(), &mut output),
+        InputMode::Bytes => rush::map_bytes_multi_ctx(context, exprs, io::stdin(), &mut output),
+        InputMode::Files => rush::map_files_multi_ctx(context, exprs, io::stdin(), &mut output),
+    }
 }
 
 /// Handle an error that occurred while processing the input.
