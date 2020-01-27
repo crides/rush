@@ -19,7 +19,7 @@ pub fn parse() -> Options {
 /// (*all* arguments, including binary name).
 #[inline]
 pub fn parse_from_argv<I, T>(argv: I) -> Options
-    where I: IntoIterator<Item=T>, T: Into<OsString>
+    where I: IntoIterator<Item=T>, T: Into<OsString> + Clone
 {
     let matches = create_parser().get_matches_from(argv);
     Options::from(matches)
@@ -129,7 +129,6 @@ impl<'a> From<ArgMatches<'a>> for InputMode {
             }
         }
         let default = InputMode::default();
-        info!("Using default processing mode ({})", default.description());
         default
     }
 }

@@ -210,8 +210,6 @@ pub fn apply_string_multi_ctx<R, W>(context: &mut Context,
     let result = try!(process(context, &asts));
     try!(write_result_line(output, result));
 
-    info!("Processed {} character(s), or {} byte(s), through {} expression(s)",
-          char_count, byte_count, expr_count);
     Ok(())
 }
 
@@ -244,8 +242,6 @@ pub fn apply_lines_multi_ctx<R, W>(context: &mut Context,
     let result = try!(process(context, &asts));
     try!(write_result_line(output, result));
 
-    info!("Processed {} line(s) of input through {} expression(s)",
-          line_count, expr_count);
     Ok(())
 }
 
@@ -279,8 +275,6 @@ pub fn map_lines_multi_ctx<R, W>(context: &mut Context,
         line_count += 1;
     }
 
-    info!("Processed {} line(s) of input through {} expression(s)",
-          expr_count, line_count);
     Ok(())
 }
 
@@ -343,8 +337,6 @@ pub fn map_words_multi_ctx<R, W>(context: &mut Context,
         }
     }
 
-    info!("Processed {} word(s) of input through {} expression(s)",
-          word_count, expr_count);
     Ok(())
 }
 
@@ -397,8 +389,6 @@ pub fn map_chars_multi_ctx<R, W>(context: &mut Context,
         }
     }
 
-    info!("Processed {} character(s) of input through {} expression(s)",
-          char_count, expr_count);
     Ok(())
 }
 
@@ -440,8 +430,6 @@ pub fn map_bytes_multi_ctx<R, W>(context: &mut Context,
         byte_count += 1;
     }
 
-    info!("Processed {} byte(s) of input through {} expression(s)",
-          byte_count, expr_count);
     Ok(())
 }
 
@@ -488,8 +476,6 @@ pub fn map_files_multi_ctx<R, W>(context: &mut Context,
         total_byte_count += byte_count;
     }
 
-    info!("Processed {} file(s) with the total of {} byte(s) through {} expression(s)",
-          file_count, total_byte_count, expr_count);
     Ok(())
 }
 
@@ -498,7 +484,6 @@ pub fn map_files_multi_ctx<R, W>(context: &mut Context,
 fn parse_exprs(exprs: &[&str]) -> io::Result<Vec<Box<Eval>>> {
     let mut result = Vec::new();
     for expr in exprs {
-        debug!("Parsing expression: {}", expr);
         let ast = try!(parse(expr)
             .map_err(|e| io::Error::new(io::ErrorKind::InvalidInput, e)));
         result.push(ast);
@@ -532,7 +517,6 @@ fn maybe_apply_result(result: Value, context: &mut Context) -> EvalResult {
                 "output must be an immediate value or a 1-argument function \
                 (got {}-argument one)", func.arity())));
         }
-        debug!("Result found to be a function, applying it to input");
         let input = context.unset_here(CURRENT).unwrap();
         return func.invoke1(input, context);
     }
